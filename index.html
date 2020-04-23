@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<head>
+    <title>GPU Rendering</title>
+    <style>
+        html, body {
+            margin: 0px;
+            overflow: hidden;
+        }
+        canvas {
+            position: absolute;
+            z-index: 1;
+        }
+        #slider_i {
+            position: absolute;
+            z-index: 2;
+        }
+        #slider_o {
+            position: absolute;
+            left: 200px;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body onload="init()">
+    <input type="range" min="1" max="5000" value="300" id="slider_i">
+    <input type="range" min="0" max="360" value="0" id="slider_o">
+    <canvas id="canvas"></canvas>
+    <script src="main.js"></script>
+</body>
+</html>
