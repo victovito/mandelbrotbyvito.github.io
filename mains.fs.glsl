@@ -1,8 +1,8 @@
 precision highp float;
 
 uniform vec2 viewportDimensions;
-uniform vec2 position;
-uniform float zoom;
+uniform highp vec2 position;
+uniform highp float zoom;
 uniform int maxIterations;
 uniform float offset;
 
