@@ -53,9 +53,9 @@ void main(){
     float value = float(iterations) / float(maxIterations);
     if (iterations >= maxIterations){
         gl_FragColor = vec4(
-            1.0 - value,
-            1.0 - value,
-            1.0 - value,
+            0.0,
+            0.0,
+            0.0,
             1.0
         );
         // gl_FragColor = vec4(

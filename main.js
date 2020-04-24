@@ -27,8 +27,8 @@ slider_o.oninput = function(){
     offset = parseFloat(slider_o.value);
 }
 
-let zoom = 500.0;
-let position = [0, 0];
+let zoom = 250.0;
+let position = [-0.5, 0];
 
 let zoomOut = false;
 let zoomIn = false;
