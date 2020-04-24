@@ -26,6 +26,23 @@ let offset = parseFloat(slider_o.value);
 slider_o.oninput = function(){
     offset = parseFloat(slider_o.value);
 }
+const check_ot = document.getElementById("offset_over_time");
+let offsetOT = check_ot.checked;
+let offotStart = Date.now();
+check_ot.addEventListener("input", function(e){
+    offsetOT = check_ot.checked;
+});
+const check_ujs = document.getElementById("use_julias_set");
+let useJuliasset = check_ujs.checked;
+check_ujs.addEventListener("input", function(e){
+    useJuliasset = check_ujs.checked;
+    if (useJuliasset){
+        slider2d.showSlider(true);
+    } else {
+        slider2d.showSlider(false);
+    }
+});
+let slider2d;
 
 let zoom = 250.0;
 let position = [-0.5, 0];
@@ -91,6 +108,7 @@ function init(){
     window.addEventListener("resize", resizeCanvas);
 
     addListeners(canvas);
+    slider2d = new Slider2d(document.getElementById("2dslider"));
 
     loadShader("/mains.vs.glsl", function(err, vertexShader){
         if (err){
@@ -163,6 +181,8 @@ function run(vertexShader, fragmentShader){
         zoom: gl.getUniformLocation(program, "zoom"),
         maxIterations: gl.getUniformLocation(program, "maxIterations"),
         offset: gl.getUniformLocation(program, "offset"),
+        useStaticC: gl.getUniformLocation(program, "useStaticC"),
+        staticC: gl.getUniformLocation(program, "staticC"),
     }
 
     //Set CPU-side variables for all of our shader variables
@@ -215,13 +235,18 @@ function run(vertexShader, fragmentShader){
             }
         }
 
-        let speed = 10 / zoom;
-
         gl.uniform2fv(uniforms.viewportDimentions, vpDimensions);
         gl.uniform2fv(uniforms.position, position);
         gl.uniform1f(uniforms.zoom, zoom);
         gl.uniform1i(uniforms.maxIterations, maxIterations);
         gl.uniform1f(uniforms.offset, offset);
+        if (offsetOT){
+            offset += 2;
+            offset = offset % 360;
+            slider_o.value = `${offset}`;
+        }
+        gl.uniform1f(uniforms.useStaticC, useJuliasset);
+        gl.uniform2fv(uniforms.staticC, slider2d.value);
 
         gl.drawArrays(gl.TRIANGLES, 0, 6);
 
@@ -229,6 +254,81 @@ function run(vertexShader, fragmentShader){
     }
     requestAnimationFrame(renderLoop);
 
+}
+
+class Slider2d {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = this.canvas.getContext("2d");
+
+        this.valueInfoElement = document.getElementById("cValue");
+
+        this.showSlider(false);
+
+        this.value = [0, 0];
+
+        this.maxValue = 1;
+
+        this.mouseDown = false;
+
+        this.drawCursor();
+        this.updateValueInfo();
+        
+        canvas.addEventListener("mousemove", function (e) {
+            if (!slider2d.mouseDown){
+                return;
+            }
+            slider2d.value = [
+                (e.layerX - slider2d.canvas.width / 2) / (slider2d.canvas.width / 2) * slider2d.maxValue,
+                ((slider2d.canvas.height - e.layerY) - slider2d.canvas.height / 2)
+                    / (slider2d.canvas.height / 2) * slider2d.maxValue
+            ];
+            slider2d.drawCursor();
+            slider2d.updateValueInfo();
+        });
+        canvas.addEventListener("mousedown", function(e){
+            if (e.which == 1){
+                slider2d.mouseDown = true;
+            }
+        });
+        canvas.addEventListener("mouseup", function(e){
+            if (e.which == 1){
+                slider2d.mouseDown = false;
+            }
+        });
+    }
+
+    drawCursor() {
+        this.ctx.clearRect(0, 0, canvas.width, canvas.height);
+        this.ctx.beginPath();
+        this.ctx.fillStyle = "white";
+        this.ctx.fillRect(0, 0, canvas.width, canvas.height);
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = "black";
+        this.ctx.lineWidth = 2;
+        this.ctx.arc(
+            this.canvas.width / 2 + this.value[0] / this.maxValue * this.canvas.width / 2,
+            this.canvas.height / 2 - this.value[1] / this.maxValue * this.canvas.height / 2,
+            4, 0, 7
+        );
+        this.ctx.stroke();
+    }
+
+    updateValueInfo(){
+        this.valueInfoElement.innerHTML = `C = ${this.value[0]} ${
+            (this.value[1] < 0) ? "-" : "+"
+        } ${Math.abs(this.value[1])}i`;
+    }
+
+    showSlider(bool){
+        if (bool){
+            this.canvas.style.display = "inline";
+            this.valueInfoElement.style.display = "inline";
+        } else {
+            this.canvas.style.display = "none";
+            this.valueInfoElement.style.display = "none";
+        }
+    }
 }
 
 function lerp(start, end, amount) {

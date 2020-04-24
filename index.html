@@ -6,24 +6,71 @@
             margin: 0px;
             overflow: hidden;
         }
-        canvas {
+        #canvas {
             position: absolute;
             z-index: 1;
         }
-        #slider_i {
+        table {
             position: absolute;
             z-index: 2;
         }
-        #slider_o {
-            position: absolute;
-            left: 200px;
-            z-index: 2;
+        tr {
+            height: fit-content;
+        }
+        p {
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            text-align: left;
+            margin-top: 0em;
+            margin-bottom: 0em;
         }
     </style>
 </head>
 <body onload="init()">
-    <input type="range" min="1" max="5000" value="300" id="slider_i">
-    <input type="range" min="0" max="360" value="0" id="slider_o">
+    <table>
+        <tr>
+            <th>
+                <input type="range" min="100" max="5000" value="100" id="slider_i">
+            </th>
+            <th>
+                <p>Max iterations</p>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <input type="range" min="0" max="360" value="0" id="slider_o">
+            </th>
+            <th>
+                <p>Hue offset</p>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <input type="checkbox" id="offset_over_time">
+            </th>
+            <th>
+                <p>Animate hue</p>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <input type="checkbox" id="use_julias_set">
+            </th>
+            <th>
+                <p>Use Julia's set</p>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <canvas width="100px" height="100px" id="2dslider"></canvas>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <p id="cValue" style="font-size: 11px;"></p>
+            </th>
+        </tr>
+    </table>
     <!-- <input type="checkbox" value="" id="slider_o"> -->
     <canvas id="canvas"></canvas>
     <script src="main.js"></script>

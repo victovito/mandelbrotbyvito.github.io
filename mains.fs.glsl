@@ -6,6 +6,9 @@ uniform highp float zoom;
 uniform int maxIterations;
 uniform float offset;
 
+uniform bool useStaticC;
+uniform vec2 staticC;
+
 vec3 rgb2hsv(vec3 c)
 {
     vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
@@ -34,9 +37,21 @@ void main(){
 
     const int maxii = 10000;
     for (int i = 0; i < maxii; i++){
-        float t = 2.0 * z.x * z.y + c.y;
+
+        float cx;
+        float cy;
+
+        if (!useStaticC){
+            cx = c.x;
+            cy = c.y;
+        } else {
+            cx = staticC.x;
+            cy = staticC.y;
+        }
+
+        float t = 2.0 * z.x * z.y + cy;
         
-        z.x = z.x * z.x - z.y * z.y + c.x;
+        z.x = z.x * z.x - z.y * z.y + cx;
         z.y = t;
 
         if (z.x * z.x + z.y * z.y > 4.0){
