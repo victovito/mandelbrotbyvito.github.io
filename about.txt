@@ -1,0 +1,13 @@
+<hr>
+<p style="text-align: center; margin-top: 0px; margin-bottom: 0px"> Torre de Hanói </p>
+
+    The Mandelbrot Set is a fractal, a set of values in the complex numbers plane. It's defined by the following equation: z<sub>n+1</sub> = z<sub>n</sub><sup>2</sup> + c. A complex number is part of the set if, when plugged in the equation, the equation remains conteined (don't grow to infinity). The colors of the fractal come from numbers that is not part of the set. Diferent colors are given depending on how fast these equations grow.
+
+<hr>
+Controlls:
+
+    Mouse buttons: Moves the camera.
+    Mouse Scroll: Increases or decreases zoom.
+
+<hr>
+<p style="text-align: right; margin-bottom: 0px;">by Vito</p>

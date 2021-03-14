@@ -110,6 +110,8 @@ function init(){
     addListeners(canvas);
     slider2d = new Slider2d(document.getElementById("2dslider"));
 
+    About.setAbout("right");
+
     loadShader("/mains.vs.glsl", function(err, vertexShader){
         if (err){
             throw Error(`An error ocurred: '${err}'`);
@@ -128,7 +130,7 @@ function init(){
 
 function run(vertexShader, fragmentShader){
 
-    gl = canvas.getContext("webgl");
+    gl = canvas.getContext("webgl", {preserveDrawingBuffer: true});
 
     //Creatign and assigning shaders
 
@@ -333,4 +335,10 @@ class Slider2d {
 
 function lerp(start, end, amount) {
     return (1-amount)*start+amount*end;
+}
+
+function test(){
+    let data = new Uint8Array(gl.drawingBufferWidth * gl.drawingBufferHeight * 4);
+    gl.readPixels(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight, gl.RGBA, gl.UNSIGNED_BYTE, data);
+    return data;
 }
