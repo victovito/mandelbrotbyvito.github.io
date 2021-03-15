@@ -48,7 +48,7 @@ class About
         }
         aboutDiv.style.width = "fit-content";
         aboutDiv.style.backgroundColor = "transparent";
-        aboutDiv.style.backdropFilter = "blur(.5cm) saturate(0%) brightness(25%)";
+        aboutDiv.style.backdropFilter = "blur(.5cm) brightness(25%)";
         aboutDiv.style.borderRadius = "6px";
         aboutDiv.style.zIndex = "10";
         aboutIcon.append(aboutDiv);
